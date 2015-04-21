@@ -18,12 +18,19 @@ class BaseRequestHandler:
     def __init__(self, ComSocket):
         self.ComSocket = ComSocket
         self.setup()
+        self.handle()
         try:
-            self.handle()
+            pass
         except:
             print("Error <BaseRequestHandler>: handle()")
         finally:
             self.finish()
+
+    def send(self, sentence, encoding='utf-8'):
+        self.ComSocket.socket.send(sentence.encode(encoding=encoding))
+
+    def recv(self, byteLen, encoding='utf-8'):
+        return self.ComSocket.socket.recv(byteLen).decode(encoding=encoding)
 
     def setup(self):
         pass

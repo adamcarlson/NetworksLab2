@@ -1,0 +1,63 @@
+Python 3.4.2 (v3.4.2:ab2c023a9432, Oct  6 2014, 22:15:05) [MSC v.1600 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> ================================ RESTART ================================
+>>> 
+Enter an HTTP command: GET /~adam/index_skel.html
+HTTP/1.1 200 OK
+Content-Type: text/html
+Accept-Ranges: bytes
+ETag: "2964183658"
+Last-Modified: Fri, 24 Apr 2015 16:43:04 GMT
+Content-Length: 43
+Date: Fri, 24 Apr 2015 16:45:02 GMT
+Server: lighttpd/1.4.33
+
+<html>
+<body>
+Hello world!
+</body>
+</html>
+
+220 bftpd 4.4 at 172.31.42.63 ready.
+
+230 User logged in.
+
+> RETR public_html/index_skel.html
+200 Transfer type changed to BINARY
+
+150 BINARY data connection established.
+
+b'<html>\n<body>\nHello world!\n</body>\n</html>\n'
+Would you like to edit this file? yes
+Enter new body, pls: <p>Hello from Tom, Adam at SPU!<br>We would like to thank Python and our mothers.<br>We'll see you all at the Turing Awards.</p>
+> stor public_html/index_skel.html
+226 File transmission successful.
+
+200 Transfer type changed to BINARY
+
+150 BINARY data connection established.
+
+Enter the name/path of the file to be sent: index_skel.html
+226 File transmission successful.
+
+> quit
+221 See you later...
+
+Enter an HTTP command: GET /~adam/index_skel.html
+HTTP/1.1 200 OK
+Vary: Accept-Encoding
+Content-Type: text/html
+Accept-Ranges: bytes
+ETag: "1030377404"
+Last-Modified: Fri, 24 Apr 2015 16:48:28 GMT
+Content-Length: 159
+Date: Fri, 24 Apr 2015 16:48:35 GMT
+Server: lighttpd/1.4.33
+
+<html>
+<body>
+<p>Hello from Tom, Adam at SPU!<br>We would like to thank Python and our mothers.<br>We'll see you all at the Turing Awards.</p>
+</body>
+</html>
+
+>>> 

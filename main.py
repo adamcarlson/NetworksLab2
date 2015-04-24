@@ -29,8 +29,8 @@ class FTPRequestHandler(sk.BaseRequestHandler):
         self.print_response()
 
     def handle(self):
-        self.quit = False
-        while not self.quit:
+        self.quitSession = False
+        while not self.quitSession:
             cmd = input('> ')
             func = getattr(self, cmd[:4].strip().lower())
             if len(cmd) > 4:
@@ -86,7 +86,7 @@ class FTPRequestHandler(sk.BaseRequestHandler):
         self.send_and_receive('DELE {}\r\n'.format(data), encoding='ascii')
 
     def quit(self):
-        self.quit = True
+        self.quitSession = True
         self.send_and_receive('QUIT\r\n', encoding='ascii')
 
     def list(self):

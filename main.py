@@ -3,12 +3,11 @@ __author__ = 'Adam Carlson, Thomas Lippert'
 
 import mySocket as sk
 import socket
-import re
+from time import sleep
 
 HOST = '52.11.118.159'
 HTTPPORT = 80
 FTPPORT = 21
-DATAPORT = 10001
 
 class HTTPRequestHandler(sk.BaseRequestHandler):
     def setup(self):
@@ -35,10 +34,12 @@ class FTPRequestHandler(sk.BaseRequestHandler):
             cmd = input('> ')
             func = getattr(self, cmd[:4].strip().lower())
             if len(cmd) > 4:
-                func(cmd[5:])
+                func(cmd[5:].strip())
             else:
                 func()
 
+    def finish(self):
+        self.ComSocket.close()
 
     def print_response(self):
         print(self.recv(1024, encoding='ascii'))
@@ -46,20 +47,53 @@ class FTPRequestHandler(sk.BaseRequestHandler):
     def print_data_response(self):
         print(self.dataSocket.recv(1024).decode(encoding='ascii'))
 
-    def push(self):
-        pass
+    def stor(self, data):
+        self.send_and_receive('TYPE I\r\n', encoding='ascii')
+        self.pasv()
+        self.send_and_receive('STOR {}\r\n'.format(data), encoding='ascii')
+        self.send_file()
+        self.dataSocket.close()
+        self.print_response()
 
-    def retr(self):
-        pass
+    def send_file(self):
+        filename = input("Enter the name/path of the file to be sent: ")
+        file = open(filename, 'rb')
+        self.dataSocket.send(file.read().decode().encode(encoding='ascii'))
+
+    def retr(self, data):
+        self.send_and_receive('TYPE I\r\n', encoding='ascii')
+        self.pasv()
+        self.send('RETR {}\r\n'.format(data), encoding='ascii')
+        self.print_response()
+        self.save_and_print_file(data)
+        self.dataSocket.close()
+
+    def save_and_print_file(self, filename):
+        if '/' in filename:
+            filename = filename.split("/")[-1]
+        file = open(filename, 'wb')
+        data = self.dataSocket.recv(100000)
+        print(data)
+        if input("Would you like to edit this file? ").lower().strip()[0] is 'y':
+            data = data.decode().replace('Hello world!', input('Enter new body, pls: '))
+        file.write(data.encode())
+        file.close()
+
+    def pwd(self):
+        self.send_and_receive('PWD\r\n', encoding='ascii')
+
+    def dele(self, data):
+        self.send_and_receive('DELE {}\r\n'.format(data), encoding='ascii')
 
     def quit(self):
         self.quit = True
-        self.send('QUIT\r\n', encoding='ascii')
+        self.send_and_receive('QUIT\r\n', encoding='ascii')
 
     def list(self):
         self.pasv()
-        self.send('LIST\r\n', encoding='ascii')
+        self.send_and_receive('LIST\r\n', encoding='ascii')
         self.print_data_response()
+        self.dataSocket.close()
 
     def get_port(self):
         data = self.recv(1024, encoding='ascii')
@@ -90,4 +124,6 @@ def ftpTest():
 
 
 if __name__ == "__main__":
+    httpTest()
     ftpTest()
+    httpTest()

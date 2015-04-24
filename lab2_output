@@ -1,0 +1,26 @@
+Tom and Adam
+Dr. Dingler
+Computer Networks
+lab2 output
+
+Initial HTTP request:
+
+C:\Python34\python.exe "C:/Users/Adam Carlson/PycharmProjects/Networks-Lab2/main.py"
+Enter an HTTP command: GET /~adam/index_skel.html
+HTTP/1.1 200 OK
+Content-Type: text/html
+Accept-Ranges: bytes
+ETag: "2753058604"
+Last-Modified: Thu, 16 Apr 2015 23:53:42 GMT
+Content-Length: 43
+Date: Fri, 24 Apr 2015 06:03:38 GMT
+Server: lighttpd/1.4.33
+
+<html>
+<body>
+Hello world!
+</body>
+</html>
+
+Process finished with exit code 0
+

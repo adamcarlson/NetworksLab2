@@ -9,6 +9,7 @@ class ComSocket(object):
     def connect(self, address):
         self.ADDR = address
         self.socket.connect(address)
+        self.socket.settimeout(1)
 
     def close(self):
         self.socket.close()
@@ -28,6 +29,14 @@ class BaseRequestHandler:
 
     def send(self, sentence, encoding='utf-8'):
         self.ComSocket.socket.send(sentence.encode(encoding=encoding))
+
+    def send_and_receive(self, sentence, encoding='utf-8'):
+        self.send(sentence, encoding=encoding)
+        while True:
+            try:
+                print(self.ComSocket.socket.recv(1024).decode(encoding='ascii'))
+            except sk.timeout:
+                return
 
     def recv(self, byteLen, encoding='utf-8'):
         return self.ComSocket.socket.recv(byteLen).decode(encoding=encoding)

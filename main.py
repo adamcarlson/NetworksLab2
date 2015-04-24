@@ -87,7 +87,8 @@ class FTPRequestHandler(sk.BaseRequestHandler):
 
     def quit(self):
         self.quitSession = True
-        self.send_and_receive('QUIT\r\n', encoding='ascii')
+        self.send('QUIT\r\n', encoding='ascii')
+        self.print_response()
 
     def list(self):
         self.pasv()
